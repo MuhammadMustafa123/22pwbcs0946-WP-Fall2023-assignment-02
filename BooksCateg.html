@@ -1,0 +1,260 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Library</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .navbar {
+      background-color: #9d3532;
+    }
+
+    .navbar-brand {
+      color: white;
+      font-weight: bold;
+    }
+
+    .navbar-nav .nav-link {
+      color: white;
+    }
+
+    .navbar-nav .nav-link:hover {
+      color: #ffc107;
+    }
+
+    #carouselExampleCaptions img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+    }
+
+    .book-card {
+      margin: 20px;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .book-card:hover {
+      transform: scale(1.05);
+    }
+
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: box-shadow 0.2s ease-in-out;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .card-text {
+      color: #6c757d;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+    }
+
+    #book-details {
+      padding: 40px 0;
+    }
+
+    #category-list {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+    }
+
+    .category-item {
+      cursor: pointer;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    .category-item:hover {
+      background-color: #0056b3;
+    }
+
+    #search-input {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #9d3532;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Online Library</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Book Categories</a>
+            <div class="dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Categories
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <!-- Populate this with actual categories dynamically using JavaScript -->
+                <li><a class="dropdown-item" href="#">Category 1</a></li>
+                <li><a class="dropdown-item" href="#">Category 2</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Category 3</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Cart</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact Us</a>
+          </li>
+        </ul>
+        <form class="d-flex">
+          <input id="search-input" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-dark" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Slideshow -->
+  <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <!-- Your existing carousel code... -->
+  </div>
+
+  <!-- Book Details Section -->
+  <div id="book-details" class="container-fluid">
+    <!-- Display categories and book information here -->
+    <div id="category-list"></div>
+    <div id="book-cards-container" class="row"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+  <script>
+    // Fetch and populate book details based on category
+    function filterBooksByCategory(category) {
+      fetch('books.json')
+        .then(response => response.json())
+        .then(data => {
+          const filteredBooks = data.filter(book => book.category === category);
+          displayBooks(filteredBooks);
+        })
+        .catch(error => console.error('Error fetching book data:', error));
+    }
+  
+    // Display categories and update book information on category selection
+    function displayCategories() {
+      fetch('books.json')
+        .then(response => response.json())
+        .then(data => {
+          const categories = [...new Set(data.map(book => book.category))];
+          const categoryListContainer = document.getElementById('category-list');
+  
+          categories.forEach(category => {
+            const categoryItem = document.createElement('div');
+            categoryItem.classList.add('category-item');
+            categoryItem.textContent = category;
+            categoryItem.addEventListener('click', () => filterBooksByCategory(category));
+  
+            categoryListContainer.appendChild(categoryItem);
+          });
+        })
+        .catch(error => console.error('Error fetching book data:', error));
+    }
+  
+    // Display all books initially
+    function displayAllBooks() {
+      fetch('books.json')
+        .then(response => response.json())
+        .then(data => {
+          const bookDetailsContainer = document.getElementById('book-cards-container');
+  
+          data.forEach(book => {
+            const bookCard = document.createElement('div');
+            bookCard.classList.add('col-md-4', 'book-card');
+  
+            bookCard.innerHTML = `
+              <div class="card">
+                <img src="${book.cover_image}" class="card-img-top" alt="${book.title}">
+                <div class="card-body">
+                  <h5 class="card-title">${book.title}</h5>
+                  <p class="card-text">By ${book.author}</p>
+                  <p class="card-text">${book.price}</p>
+                </div>
+              </div>
+            `;
+  
+            bookDetailsContainer.appendChild(bookCard);
+          });
+        })
+        .catch(error => console.error('Error fetching book data:', error));
+    }
+  
+    // Display categories initially
+    displayCategories();
+  
+    // Additional code for search functionality
+    const searchInput = document.getElementById('search-input');
+    searchInput.addEventListener('input', () => {
+      const searchTerm = searchInput.value.toLowerCase();
+      fetch('books.json')
+        .then(response => response.json())
+        .then(data => {
+          const filteredBooks = data.filter(book => 
+            book.title.toLowerCase().includes(searchTerm) || 
+            book.author.toLowerCase().includes(searchTerm)
+          );
+          displayBooks(filteredBooks);
+        })
+        .catch(error => console.error('Error fetching book data:', error));
+    });
+  
+    // Display all books initially
+    displayAllBooks();
+  </script>
+  
+
+</body>
+</html>

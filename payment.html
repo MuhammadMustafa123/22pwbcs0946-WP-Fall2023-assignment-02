@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Receipt</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <style>
+    body {
+      padding: 20px;
+    }
+
+    .receipt-table {
+      margin-top: 20px;
+    }
+
+    .return-home-link {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Payment Receipt</h1>
+
+  <div class="receipt-table">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Book Title</th>
+          <th scope="col">Price</th>
+        </tr>
+      </thead>
+      <tbody id="receipt-items-container">
+        <!-- Receipt items will be dynamically populated here using JavaScript -->
+      </tbody>
+    </table>
+
+    <div id="total-amount" class="mt-4">
+      <h4>Total Amount: $<span id="total-amount-value">0.00</span></h4>
+    </div>
+  </div>
+
+  <div class="return-home-link">
+    <a href="index.html">Return to Home Page</a>
+  </div>
+
+  <script>
+    // Sample receipt data for testing (replace this with actual receipt data)
+    const receiptItems = [
+      { title: 'To Kill a Mockingbird', price: 25.98 },
+      { title: '1984', price: 9.99 },
+      // Add more items as needed
+    ];
+
+    // Function to calculate and display total amount
+    function calculateTotalAmount() {
+      const totalAmountElement = document.getElementById('total-amount-value');
+      const totalAmount = receiptItems.reduce((total, item) => total + item.price, 0);
+      totalAmountElement.textContent = totalAmount.toFixed(2);
+    }
+
+    // Function to display receipt items
+    function displayReceiptItems() {
+      const receiptItemsContainer = document.getElementById('receipt-items-container');
+      receiptItemsContainer.innerHTML = '';
+
+      receiptItems.forEach(item => {
+        const itemRow = document.createElement('tr');
+        itemRow.innerHTML = `
+          <td>${item.title}</td>
+          <td>$${item.price.toFixed(2)}</td>
+        `;
+
+        receiptItemsContainer.appendChild(itemRow);
+      });
+    }
+
+    // Display receipt items and total amount initially
+    displayReceiptItems();
+    calculateTotalAmount();
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

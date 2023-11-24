@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #9d3532;">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Online Library</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Book Categories</a>
+                <div class="dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Categories
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <!-- Populate this with actual categories dynamically using JavaScript -->
+                    <li><a class="dropdown-item" href="#">Category 1</a></li>
+                    <li><a class="dropdown-item" href="#">Category 2</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Category 3</a></li>
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Cart</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Contact Us</a>
+              </li>
+            </ul>
+            <form class="d-flex">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-dark" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+  <div class="container mt-5">
+    <h1>Shopping Cart</h1>
+
+    <div id="cart-items-container" class="mt-4">
+      <!-- Cart items will be dynamically populated here using JavaScript -->
+    </div>
+
+    <div id="total-amount" class="mt-4">
+      <h4>Total Amount: $<span id="total-amount-value">0.00</span></h4>
+    </div>
+
+    <div class="mt-4">
+      <button class="btn btn-primary" onclick="proceedToPayment()">Proceed to Payment</button>
+    </div>
+  </div>
+
+  <script>
+    // Sample cart data for testing (replace this with actual cart data)
+    const cartItems = [
+      { id: 1, title: 'To Kill a Mockingbird', price: 12.99, quantity: 2 },
+      { id: 2, title: '1984', price: 9.99, quantity: 1 },
+      // Add more items as needed
+    ];
+
+    // Function to calculate and display total amount
+    function calculateTotalAmount() {
+      const totalAmountElement = document.getElementById('total-amount-value');
+      const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+      totalAmountElement.textContent = totalAmount.toFixed(2);
+    }
+
+    // Function to remove an item from the cart
+    function removeItem(itemId) {
+      const updatedCartItems = cartItems.filter(item => item.id !== itemId);
+      cartItems.length = 0; // Clear the existing items
+      Array.prototype.push.apply(cartItems, updatedCartItems); // Add updated items
+      displayCartItems();
+      calculateTotalAmount();
+    }
+
+    // Function to adjust the quantity of an item in the cart
+    function adjustQuantity(itemId, newQuantity) {
+      const itemToUpdate = cartItems.find(item => item.id === itemId);
+      if (itemToUpdate) {
+        itemToUpdate.quantity = newQuantity;
+        displayCartItems();
+        calculateTotalAmount();
+      }
+    }
+
+    // Function to display cart items
+    function displayCartItems() {
+      const cartItemsContainer = document.getElementById('cart-items-container');
+      cartItemsContainer.innerHTML = '';
+
+      cartItems.forEach(item => {
+        const itemContainer = document.createElement('div');
+        itemContainer.classList.add('card', 'mb-3');
+
+        itemContainer.innerHTML = `
+          <div class="card-body">
+            <h5 class="card-title">${item.title}</h5>
+            <p class="card-text">Price: $${item.price.toFixed(2)}</p>
+            <p class="card-text">Quantity: ${item.quantity}</p>
+            <button class="btn btn-danger" onclick="removeItem(${item.id})">Remove</button>
+            <input type="number" min="1" value="${item.quantity}" onchange="adjustQuantity(${item.id}, this.value)">
+          </div>
+        `;
+
+        cartItemsContainer.appendChild(itemContainer);
+      });
+    }
+
+    // Function to proceed to payment page
+    function proceedToPayment() {
+      // Add your navigation logic to the payment page
+      alert('Proceeding to Payment Page');
+      window.location.href = 'payment.html';
+    }
+
+    // Display cart items and total amount initially
+    displayCartItems();
+    calculateTotalAmount();
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
